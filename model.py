@@ -15,7 +15,10 @@ for line in lines:
 	source_path = line[0]
 	filename = os.path.basename(source_path)
 	current_path = os.path.join('../P3_Data/IMG/', filename)
-	image = cv2.imread(current_path)
+	try:
+		image = cv2.imread(current_path)
+	except:
+		break
 	images.append(image)
 	measurement = float(line[3])
 	measurements.append(measurement)
@@ -31,7 +34,7 @@ model.add(Flatten(input_shape = (160,320,3)))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split = 0.2, \\
+model.fit(X_train, y_train, validation_split = 0.2, \
 		  shuffle = True, nb_epoch=7)
 
 model.save('model.h5')
