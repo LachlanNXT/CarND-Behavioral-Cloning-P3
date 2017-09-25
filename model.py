@@ -1,6 +1,7 @@
 import csv
 import os
 import cv2
+import numpy as np
 
 lines = []
 with open('../P3_Data/driving_log.csv') as csvfile:
