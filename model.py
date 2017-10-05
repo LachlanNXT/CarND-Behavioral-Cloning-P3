@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.image as mpimg
 
 lines = []
-with open('../data/driving_log.csv') as csvfile:
+with open('../P3_data_sharp_corners/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
 		lines.append(line)
@@ -18,12 +18,13 @@ for i,line in enumerate(lines):
 	source_path_l = line[1]
 	source_path_r = line[2]
 	for j,k in enumerate([source_path_c, source_path_l, source_path_r]):
-		filename = os.path.basename(k)
-		current_path = os.path.join('../data/IMG/', filename)
+		filename = ntpath.basename(k)
+		current_path = os.path.join('../P3_data_sharp_corners/IMG/', filename)
 		# Try - Except for when the images are being uploaded
 		try:
 			image = mpimg.imread(current_path)
 		except:
+			print('imread failed')
 			break
 		measurement = float(line[3])
 		if j==0:
@@ -76,6 +77,8 @@ model.add(Dense(32))
 model.add(Activation('relu'))
 model.add(Dense(1))
 
+from keras.models import load_model
+model = load_model('model.h5')
 from keras.callbacks import EarlyStopping
 model.compile(loss='mse', optimizer='adam')
 early_stopping = EarlyStopping(monitor = 'val_loss', min_delta = 0.01, \
