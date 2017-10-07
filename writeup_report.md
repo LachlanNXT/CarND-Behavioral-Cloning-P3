@@ -44,7 +44,7 @@ The model includes RELU layers to introduce nonlinearity (eg. code line 83), and
 
 The model contains a 50% dropout layer before the first fully connected layer in order to reduce overfitting (code line 93). 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting. I was also tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting. It was also tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### Model parameter tuning
 
@@ -113,9 +113,9 @@ The final model architecture consisted of a convolution neural network with the 
 
 #### Creation of the Training Set & Training Process
 
-At first I only captured two regular driving laps and used those to create a model of sufficient complexity to do the task. When I was satistied that the model was sufficiently complex and learning well, I worked on data collection for training the model well because it was not performing well on just the two tracks.
+At first I only captured two regular driving laps and used those to create a model of sufficient complexity to do the task. When I was satistied that the model was sufficiently complex and learning well, I worked on data collection for training the model well because it was not performing well training on just the two regular laps.
 
-It is important for the model to experience all the different driving modes it might have to perform, and not to overlearn certain types of driving at the expense of others. Therefore, I started by collecting separate data sets that covered all possible driving domains I could think of, listed under "Appropriate training data". I compiled all these images into a data set of about 25,000 images and trained the model on this. The driving performance of the model was significantly improved, but it still struggled a bit on sharp corners and recoveries, so I trained the saved model again on the recovery and sharp corner data sets only, and this resulted in a good model that could drive the whole track.
+It is important for the model to experience (train on) all the different driving modes it might have to perform, and not to overlearn certain types of driving at the expense of others. Therefore, I started by collecting separate data sets that covered all possible driving domains I could think of, listed above under "Appropriate training data". I compiled all these images into a data set of about 25,000 images and trained the model on this. The driving performance of the model was significantly improved, but it still struggled a bit on sharp corners and recoveries, so I trained the saved model again on the recovery and sharp corner data sets only, and this resulted in a good model that could drive the whole track.
 
 Example of regular driving:
 
@@ -123,7 +123,7 @@ Example of regular driving:
 
 The collection of normal laps, sharp corners and the provided data shouldn't need any further explanation, so I will detail the collection of recovery data.
 
-Recovery data was collected by positioning the car to one side of the track, then turning towards the centre, then starting recording while driving back to the centre of the road. I did this on the left side and right sides of the road back to center so that the vehicle would learn to recovery both ways, and on the bridge, around corners etc. so it could generalise. See below for an example:
+Recovery data was collected by positioning the car to one side of the track, then turning towards the centre, then starting recording while driving back to the centre of the road. I did this on the left side and right sides of the road back to center so that the vehicle would learn to recovery both ways, and on the bridge, around corners, reverse direction etc. so it could generalise. See below for an example:
 
 ![alt text][recov1] ![alt text][recov2] ![alt text][recov3]
 ![alt text][recov4] ![alt text][recov5] ![alt text][recov6]
