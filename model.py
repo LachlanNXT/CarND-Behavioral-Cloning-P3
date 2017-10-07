@@ -4,10 +4,12 @@ import os
 import numpy as np
 import matplotlib.image as mpimg
 
-# csv file contains image filenames
 lines = []
-# TODO: change folder to current dataset
-with open('../P3_data_sharp_corners/driving_log.csv') as csvfile:
+# Change PATH to current dataset
+PATH = '../P3_data_sharp_corners/'
+
+# csv file contains image filenames
+with open(PATH + 'driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
 		lines.append(line)
@@ -15,6 +17,8 @@ with open('../P3_data_sharp_corners/driving_log.csv') as csvfile:
 images = []
 measurements = []
 
+# This is inefficient and should probably use a
+# generator, but it worked fine without
 for i,line in enumerate(lines):
 	# Get centre, left and right images
 	source_path_c = line[0]
@@ -23,8 +27,7 @@ for i,line in enumerate(lines):
 	for j,k in enumerate([source_path_c, source_path_l, source_path_r]):
 		# simulator run on windows so use ntpath to get filename
 		filename = ntpath.basename(k)
-		# TODO: change folder to current dataset
-		current_path = os.path.join('../P3_data_sharp_corners/IMG/', filename)
+		current_path = os.path.join(PATH + 'IMG/', filename)
 		# Try - Except for image read issues
 		try:
 			image = mpimg.imread(current_path)
@@ -43,13 +46,13 @@ for i,line in enumerate(lines):
 		# if right image turn left more
 		if j ==2:
 			measurements.append(measurement-correction)
-		# flip image and measurement
+		# flip image and measurement for diversity
 		image_flipped = np.fliplr(image)
 		measurement_flipped = -measurement
 		images.append(image_flipped)
 		measurements.append(measurement_flipped)
 
-print("read {} images".format(i))
+print("read {} images".format(i*4))
 
 # generator was not necessary using aws
 X_train = np.array(images)
