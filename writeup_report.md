@@ -36,9 +36,9 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### Overview
 
-My model consists of three stages: input preparation (code lines 77-79), three sets of convolutional - max pooling - activation layers (code lines 81-89), and three fully connected layers (code lines 91-100). The final fully connected layer is the regression output.
+My model consists of three stages: input preprocessing (code lines 77-79), three sets of convolutional - max pooling - activation layers (code lines 81-89), and three fully connected layers (code lines 91-100). The final fully connected layer is the regression output.
 
-The model includes RELU layers to introduce nonlinearity (eg. code line 83), and the data is cropped and normalized in the model using Keras cropping and lambda layers (input preparation). Input preparation is performed in the model because the output of the simulator will need these operations performed as well.
+The model includes RELU layers to introduce nonlinearity (eg. code line 83), and the data is cropped and normalized in the model using Keras cropping and lambda layers (input preprocessing). Input preprocessing is performed in the model because the output of the simulator will need these operations performed as well.
 
 #### Attempts to reduce overfitting in the model
 
