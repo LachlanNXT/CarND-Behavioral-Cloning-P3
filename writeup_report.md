@@ -9,13 +9,13 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[centre]: ./examples/centre.png "Centre"
-[recov1]: ./examples/recov1.png "Recovery Image"
-[recov2]: ./examples/recov2.png "Recovery Image"
-[recov3]: ./examples/recov3.png "Recovery Image"
-[recov4]: ./examples/recov4.png "Recovery Image"
-[recov5]: ./examples/recov5.png "Recovery Image"
-[recov6]: ./examples/recov6.png "Recovery Image"
+[centre]: ./examples/centre.jpg "Centre"
+[recov1]: ./examples/recov1.jpg "Recovery Image"
+[recov2]: ./examples/recov2.jpg "Recovery Image"
+[recov3]: ./examples/recov3.jpg "Recovery Image"
+[recov4]: ./examples/recov4.jpg "Recovery Image"
+[recov5]: ./examples/recov5.jpg "Recovery Image"
+[recov6]: ./examples/recov6.jpg "Recovery Image"
 
 My project includes the following files:
 * model.py containing the script to create and train the model
