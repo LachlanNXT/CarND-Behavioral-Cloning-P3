@@ -9,13 +9,13 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[centre]: ./examples/centre.png "Centre"
+[recov1]: ./examples/recov1.png "Recovery Image"
+[recov2]: ./examples/recov2.png "Recovery Image"
+[recov3]: ./examples/recov3.png "Recovery Image"
+[recov4]: ./examples/recov4.png "Recovery Image"
+[recov5]: ./examples/recov5.png "Recovery Image"
+[recov6]: ./examples/recov6.png "Recovery Image"
 
 My project includes the following files:
 * model.py containing the script to create and train the model
@@ -80,42 +80,56 @@ Because it was ok in these situation but performed poorly on:
 I trained the model on a combination of all these types of examples, saved the model, tested it in the simulator, and if it was lacking in a particular driving skill, trained the saved model further on data of that type only.
 
 Validation was performed automatically using the keras validation_split, with the data being shuffled beforehand to prevent ordering affecting learning.
-To combat the overfitting, included dropout in the model and implemented early stopping in the fitting. If the accuracy was no longer increasing by at least 0.01, the training was stopped.
+To combat the overfitting, I included dropout in the model and implemented early stopping in the fitting. If the accuracy was no longer increasing by at least 0.01, the training was stopped. This prevents overfitting to the training data.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
 #### Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture consisted of a convolution neural network with the following layers and layer sizes 
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+| Layer         		|     Description	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| Input         		| 160,320,3 RGB image   							| 
+| Cropping         		| 50 rows from the tpo and 20 rows from the bottom of the image | 
+| Normalisation 		| zero mean etc. |
+| Convolution  	| 16 filters, 10x10 kernel, 1x1 stride, valid padding |
+| Max pooling	   | 2x2 kernel, valid padding	|
+| RELU					|												|
+| Convolution  	| 32 filters, 10x10 kernel, 1x1 stride, valid padding |
+| Max pooling	   | 2x2 kernel, valid padding	|
+| RELU					|												|
+| Convolution  	| 64 filters, 10x10 kernel, 1x1 stride, valid padding |
+| Max pooling	   | 2x2 kernel, valid padding	|
+| RELU					|												|
+| Flattening	    |    								|
+| Dropout					|					50%							|
+| Fully connected		| 64 neurons  									|
+| RELU					|												|
+| Fully connected		| 32 neurons	|
+| RELU					|												|
+| Fully connected		| 1 neuron, output of regression		|
 
-![alt text][image1]
 
 #### Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+At first I only captured two regular driving laps and used those to create a model of sufficient complexity to do the task. When I was satistied that the model was sufficiently complex and learning well, I worked on data collection for training the model well because it was not performing well on just the two tracks.
 
-![alt text][image2]
+It is important for the model to experience all the different driving modes it might have to perform, and not to overlearn certain types of driving at the expense of others. Therefore, I started by collecting separate data sets that covered all possible driving domains I could think of, listed under "Appropriate training data". I compiled all these images into a data set of about 25,000 images and trained the model on this. The driving performance of the model was significantly improved, but it still struggled a bit on sharp corners and recoveries, so I trained the saved model again on the recovery and sharp corner data sets only, and this resulted in a good model that could drive the whole track.
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+Example of regular driving:
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+![alt text][centre]
 
-Then I repeated this process on track two in order to get more data points.
+The collection of normal laps, sharp corners and the provided data shouldn't need any further explanation, so I will detail the collection of recovery data.
+
+Recovery data was collected by positioning the car to one side of the track, then turning towards the centre, then starting recording while driving back to the centre of the road. I did this on the left side and right sides of the road back to center so that the vehicle would learn to recovery both ways, and on the bridge, around corners etc. so it could generalise. See below for an example:
+
+![alt text][recov1] ![alt text][recov2] ![alt text][recov3]
+![alt text][recov4] ![alt text][recov5] ![alt text][recov6]
 
 To augment the data sat, I also flipped images and angles. This, along with other measures, was designed to provide the model with diversity in training data, allowing it to generalise and learn to turn in both directions.
 
-![alt text][image6]
-![alt text][image7]
+Data was randomly shuffled and 20% set aside for a validation set. 
 
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
-
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. Only around 5 epochs was required for initial training, and only 2 for most additional training to fix specific driving behaviours.
