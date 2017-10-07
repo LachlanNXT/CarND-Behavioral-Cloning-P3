@@ -36,39 +36,51 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### Overview
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+My model consists of three stages: input preparation (code lines 77-79), three sets of convolutional - max pooling - activation layers (code lines 81-89), and three fully connected layers (code lines 91-100). The final fully connected layer is the regression output.
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+The model includes RELU layers to introduce nonlinearity (eg. code line 83), and the data is cropped and normalized in the model using Keras cropping and lambda layers (input preparation). Input preparation is performed in the model because the output of the simulator will need these operations performed as well.
 
 #### Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The model contains a 50% dropout layer before the first fully connected layer in order to reduce overfitting (code line 93). 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting. I was also tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually (code line 108).
 
 #### Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
-
-For details about how I created the training data, see the next section. 
+I found very quickly that the ability of the model is entirely dependent on the quality, quantity, and type of training data provided. Under recommendation of the course material and forums, and through my own experimentation, I collected data of the following types for training:
+* forwards laps (normal)
+* backwards laps (normal)
+* bridge (normal and recovery)
+* sharp corners
+* road recoveries
+* provided example data
 
 #### Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+The overall strategy for deriving a model architecture was to add layers or increase parameters when the model seemed to require more complexity, and to use the LeNet 5 and NVidia end to end learning CNN for inspiration.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+My first step was to follow through sections 7-18 of the behavioral cloning project lesson. I set up a network with a single layer initially to test everything, and found as expected that is was not complex enough for this problem. I added preprocessing to perform normalisation so it would optimise quicker, and cropping so the network would not use irrelevant information.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+I built up convolutional layers, flattening, dropout and fully connected layers with activations inbetween inspired by the more complex networks mentioned above. I experimented with adding layers, increasing and decreasing neuron counts in the layers and increasing and decreasing kernel size of convolutional and pooling layers until my model was able to reach a low validation cost (approx. 0.01). My validation cost and learning cost were never too different, I think because the dropout layer prevented overfitting. At this point I was confident that the model was able to learn well, but was still not performing well at driving around the track. I had initially been using only normal forward driving data, and it was clear that I needed to focus on data collection. I suspected that the model was overlearning on the most prominent data, i.e.:
+* left turning
+* low turning angles
+* regular road surface
 
-To combat the overfitting, I modified the model so that ...
+Because it was ok in these situation but performed poorly on:
+* sharp steering angles
+* the bridge
+* recovering from the road edge
+* irregular road markings
 
-Then I ... 
+I trained the model on a combination of all these types of examples, saved the model, tested it in the simulator, and if it was lacking in a particular driving skill, trained the saved model further on data of that type only.
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+Validation was performed automatically using the keras validation_split, with the data being shuffled beforehand to prevent ordering affecting learning.
+To combat the overfitting, included dropout in the model and implemented early stopping in the fitting. If the accuracy was no longer increasing by at least 0.01, the training was stopped.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
@@ -94,7 +106,7 @@ I then recorded the vehicle recovering from the left side and right sides of the
 
 Then I repeated this process on track two in order to get more data points.
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+To augment the data sat, I also flipped images and angles. This, along with other measures, was designed to provide the model with diversity in training data, allowing it to generalise and learn to turn in both directions.
 
 ![alt text][image6]
 ![alt text][image7]
